@@ -15,6 +15,7 @@
 /* Camera */
 #dish div {
   background-color: #fff !important;
+  box-shadow: 0px 12px 22px rgba(0, 0, 0, 0.4);
 }
 #dish video {
   position: relative;

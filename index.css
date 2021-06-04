@@ -1,31 +1,21 @@
 /* Container */
 #dish {
-  display: flex;
-  align-content: center;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  top: 60px;
-  right: 0px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* see notes below */
+  grid-gap: 1em;
 }
+
 /* Camera */
-#dish div {
-  background-color: #fff !important;
-  vertical-align: middle;
-  align-self: center;
-  border-radius: 10px;
-  overflow: hidden;
-  display: inline-block;
-  box-shadow: 0px 12px 22px rgba(0, 0, 0, 0.4);
-  background: #fff;
-  animation: show 0.4s ease;
+#dish .camera {
+  width: 300px;
+  height: 300px;
 }
-#dish video {
-  position: relative;
+
+.camera > div{
+  background: unset !important;
+}
+
+.camera .agora_video_player {
   vertical-align: middle;
   align-self: center;
   border-radius: 10px;
@@ -35,6 +25,8 @@
   background: #fff;
   animation: show 0.4s ease;
   background-color: #fff;
+  width: inherit;
+  height: inherit;
 }
 /* Animation */
 @keyframes show {
@@ -49,11 +41,11 @@
 }
 
 .button-group{
-  position: absolute;
+  /* position: absolute; */
   display: flex;
   justify-content: center;
-  z-index: 9999999999;
-  width: 100%;
+  /* z-index: 9999999999; */
+  /* width: 100%; */
   gap: 12px;
 }
 

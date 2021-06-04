@@ -54,9 +54,6 @@ async function join() {
   console.log("publish success");
 }
 
-/*
- * Stop all local and remote tracks then leave the channel.
- */
 async function leave() {
   for (trackName in localTracks) {
     var track = localTracks[trackName];
@@ -75,15 +72,10 @@ async function leave() {
   document.querySelector("#join").removeAttribute("disabled");
   document.querySelector("#leave").setAttribute("disabled", true);
   console.log("client leaves channel success");
+
+  document.querySelectorAll('.remote-camera').forEach(e => e.remove());
 }
 
-
-/*
- * Add the local use to a remote channel.
- *
- * @param  {IAgoraRTCRemoteUser} user - The {@link  https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/iagorartcremoteuser.html| remote user} to add.
- * @param {trackMediaType - The {@link https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/itrack.html#trackmediatype | media type} to add.
- */
 async function subscribe(user, mediaType) {
   const uid = user.uid;
   // subscribe to a remote user
@@ -91,11 +83,11 @@ async function subscribe(user, mediaType) {
   console.log("subscribe success");
   if (mediaType === 'video') {
     const camera = `
-      <div class="camera" id="player-${uid}">
+      <div class="camera remote-camera" id="player-${uid}">
       </div>
     `;
     document.querySelector("#dish").insertAdjacentHTML('beforeend', camera);
-    Dish();
+    // Dish();
     user.videoTrack.play(`player-${uid}`);
   }
   if (mediaType === 'audio') {
@@ -103,27 +95,17 @@ async function subscribe(user, mediaType) {
   }
 }
 
-/*
- * Add a user who has subscribed to the live channel to the local interface.
- *
- * @param  {IAgoraRTCRemoteUser} user - The {@link  https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/iagorartcremoteuser.html| remote user} to add.
- * @param {trackMediaType - The {@link https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/itrack.html#trackmediatype | media type} to add.
- */
 function handleUserPublished(user, mediaType) {
   const id = user.uid;
   remoteUsers[id] = user;
   subscribe(user, mediaType);
 }
 
-/*
- * Remove the user specified from the channel in the local interface.
- *
- * @param  {string} user - The {@link  https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/iagorartcremoteuser.html| remote user} to remove.
- */
 function handleUserUnpublished(user) {
   const id = user.uid;
   delete remoteUsers[id];
-  fadeOutEffect(`#player-${id}`);
+
+  // Dish();
 }
 
 
@@ -131,93 +113,60 @@ function handleUserUnpublished(user) {
 ////////////////////////////////////////////////////////////////////////
 
 // Area:
-function Area(Increment, Count, Width, Height, Margin = 10) {
-  let i = w = 0;
-  let h = Increment * 0.75 + (Margin * 2);
-  while (i < (Count)) {
-    if ((w + Increment) > Width) {
-      w = 0;
-      h = h + (Increment * 0.75) + (Margin * 2);
-    }
-    w = w + Increment + (Margin * 2);
-    i++;
-  }
-  if (h > Height) return false;
-  else return Increment;
-}
+// function Area(Increment, Count, Width, Height, Margin = 10) {
+//   let i = w = 0;
+//   let h = Increment * 0.75 + (Margin * 2);
+//   while (i < (Count)) {
+//     if ((w + Increment) > Width) {
+//       w = 0;
+//       h = h + (Increment * 0.75) + (Margin * 2);
+//     }
+//     w = w + Increment + (Margin * 2);
+//     i++;
+//   }
+//   if (h > Height) return false;
+//   else return Increment;
+// }
+
 // Dish:
-function Dish() {
+// function Dish() {
 
-  // variables:
-  let Margin = 2;
-  let Scenary = document.getElementById('dish');
-  let Width = Scenary.offsetWidth - (Margin * 2);
-  let Height = Scenary.offsetHeight - (Margin * 2);
-  let Cameras = document.getElementsByClassName('camera');
-  let max = 0;
+//   // variables:
+//   let Margin = 2;
+//   let Scenary = document.getElementById('dish');
+//   let Width = Scenary.offsetWidth - (Margin * 2);
+//   let Height = Scenary.offsetHeight - (Margin * 2);
+//   let Cameras = document.getElementsByClassName('camera');
+//   let max = 0;
 
-  // loop (i recommend you optimize this)
-  let i = 1;
-  while (i < 5000) {
-    let w = Area(i, Cameras.length, Width, Height, Margin);
-    if (w === false) {
-      max = i - 1;
-      break;
-    }
-    i++;
-  }
+//   // loop (i recommend you optimize this)
+//   let i = 1;
+//   while (i < 5000) {
+//     let w = Area(i, Cameras.length, Width, Height, Margin);
+//     if (w === false) {
+//       max = i - 1;
+//       break;
+//     }
+//     i++;
+//   }
 
-  // set styles
-  max = max - (Margin * 2);
-  setWidth(max, Margin);
-}
+//   // set styles
+//   max = max - (Margin * 2);
+//   setWidth(max, Margin);
+// }
 
 // Set Width and Margin 
-function setWidth(width, margin) {
-  let Cameras = document.getElementsByClassName('camera');
-  for (var s = 0; s < Cameras.length; s++) {
-    Cameras[s].style.width = width + "px";
-    Cameras[s].style.margin = margin + "px";
-    Cameras[s].style.height = (width * 0.75) + "px";
-  }
-}
+// function setWidth(width, margin) {
+//   let Cameras = document.getElementsByClassName('camera');
+//   for (var s = 0; s < Cameras.length; s++) {
+//     Cameras[s].style.width = width + "px";
+//     Cameras[s].style.margin = margin + "px";
+//     Cameras[s].style.height = (width * 0.75) + "px";
+//   }
+// }
 
 // Load and Resize Event
-window.addEventListener("load", function (event) {
-  Dish();
-  window.onresize = Dish;
-}, false);
-
-// Function to delete Camera
-function less(id) {
-  let Camera = document.querySelector(`#player-${id}`);
-  Camera.parentNode.removeChild(Camera);
-  Dish();
-}
-
-// Function to add Camera
-function add(id) {
-  const player = `
-      <div class="camera player-${uid}">
-      </div>
-    `;
-  document.querySelector("#dish").insertAdjacentHTML('beforeend', player);
-  Dish();
-}
-
-function fadeOutEffect(id) {
-  var fadeTarget = document.getElementById(id);
-  var fadeEffect = setInterval(function () {
-    if (!fadeTarget.style.opacity) {
-      fadeTarget.style.opacity = 1;
-    }
-    if (fadeTarget.style.opacity > 0) {
-      fadeTarget.style.opacity -= 0.1;
-    } else {
-      var dish = document.querySelector(`#dish`)
-      var player_wrapper = document.querySelector(id)
-      dish.removeChild(player_wrapper);
-      clearInterval(fadeEffect);
-    }
-  }, 200);
-}
+// window.addEventListener("load", function (event) {
+//   Dish();
+//   window.onresize = Dish;
+// }, false);

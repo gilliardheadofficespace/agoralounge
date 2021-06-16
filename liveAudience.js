@@ -138,5 +138,5 @@ function handleUserPublished(user, mediaType) {
 function handleUserUnpublished(user) {
   const id = user.uid;
   delete remoteUsers[id];
-  $(`#player-wrapper-${id}`).remove();
+  $(`#player-${id}`).remove();
 }

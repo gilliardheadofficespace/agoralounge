@@ -7,27 +7,21 @@ var localTracks = {
 
 var remoteUsers = {};
 
-var options = {
-  appid: '',
-  channel: '',
+// Agora client options
+var options = { 
+  appid: null,
+  channel: null,
   uid: null,
   token: null
 };
 
-if (navigator.mediaDevices.getUserMedia !== null) {
-  navigator.webkitGetUserMedia({ 
-    video:false, 
-    audio:false 
-  }); 
-}
-
+// the demo can auto join channel with params in url
 $(() => {
   var urlParams = new URL(location.href).searchParams;
   options.appid = urlParams.get("appid");
   options.channel = urlParams.get("channel");
   options.token = urlParams.get("token");
   options.uid = urlParams.get("uid");
-  join();
 })
 
 document.querySelector("#join").addEventListener("click", function (e) {

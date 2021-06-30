@@ -1,12 +1,5 @@
 var client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
-if (navigator.mediaDevices.getUserMedia !== null) {
-  navigator.webkitGetUserMedia({ 
-    video:false, 
-    audio:false 
-  }); 
-}
-
 var localTracks = {
   videoTrack: null,
   audioTrack: null
@@ -15,11 +8,27 @@ var localTracks = {
 var remoteUsers = {};
 
 var options = {
-  appid: 'f002e5dd51c847559691ca747943a399',
-  channel: 'HeadOfficePublic',
+  appid: '',
+  channel: '',
   uid: null,
   token: null
 };
+
+if (navigator.mediaDevices.getUserMedia !== null) {
+  navigator.webkitGetUserMedia({ 
+    video:false, 
+    audio:false 
+  }); 
+}
+
+$(() => {
+  var urlParams = new URL(location.href).searchParams;
+  options.appid = urlParams.get("appid");
+  options.channel = urlParams.get("channel");
+  options.token = urlParams.get("token");
+  options.uid = urlParams.get("uid");
+  join();
+})
 
 document.querySelector("#join").addEventListener("click", function (e) {
   e.preventDefault();

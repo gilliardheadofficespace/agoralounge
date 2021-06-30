@@ -80,8 +80,6 @@ async function join() {
     localTracks.audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
     // play local video track
-    localTracks.videoTrack.play("local-player");
-    $("#local-player-name").text(`localTrack(${options.uid})`);
     // publish local tracks to channel
     await client.publish(Object.values(localTracks));
     console.log("publish success");
@@ -105,7 +103,6 @@ async function leave() {
   // leave the channel
   await client.leave();
 
-  $("#local-player-name").text("");
   $("#host-join").attr("disabled", false);
   $("#audience-join").attr("disabled", false);
   $("#leave").attr("disabled", true);

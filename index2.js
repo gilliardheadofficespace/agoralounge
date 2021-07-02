@@ -12,11 +12,19 @@ var localTrackState = {
 var remoteUsers = {};
 
 var options = {
-  appid: 'f002e5dd51c847559691ca747943a399',
-  channel: 'teste',
+  appid: null,
+  channel: null,
   uid: null,
   token: null
 };
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+  var urlParams = new URL(location.href).searchParams;
+  options.appid = urlParams.get("appid");
+  options.channel = urlParams.get("channel");
+  options.token = urlParams.get("token");
+  options.uid = urlParams.get("uid");
+});
 
 document.querySelector("#join").addEventListener("click", function (e) {
   e.preventDefault();

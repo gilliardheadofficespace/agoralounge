@@ -1,0 +1,96 @@
+/* Container */
+#dish {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* see notes below */
+  grid-gap: 1em;
+}
+
+/* Camera */
+#dish .camera {
+  width: 300px;
+  height: 300px;
+  position: relative;
+}
+
+.camera > div{
+  background: unset !important;
+}
+
+.camera .agora_video_player {
+  vertical-align: middle;
+  align-self: center;
+  border-radius: 10px;
+  overflow: hidden;
+  display: inline-block;
+  box-shadow: 0px 12px 22px rgba(0, 0, 0, 0.4);
+  background: #fff;
+  animation: show 0.4s ease;
+  background-color: #fff;
+  width: inherit;
+  height: inherit;
+}
+/* Animation */
+@keyframes show {
+  0% {
+      opacity: 0;
+      transform: scale(0.4) translateY(20px);
+  }
+  100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+  }
+}
+
+.button-group{
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.button {
+  padding: 1rem 2rem;
+  border-radius: 3rem;
+  min-width: 150px;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 10px 20px 0 rgba(0,0,0,.15);
+  transition: .8s cubic-bezier(.2,1,.2,1);
+  cursor: pointer;
+}
+
+#join.button{
+  background: linear-gradient(45deg,#3471f5,#6f9dff);
+}
+
+#leave.button{
+  background: linear-gradient(45deg,#f53434,#ff6f6f);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px 0 rgba(0,0,0,.25);  
+}
+
+.audio-button{
+  display: block;
+    left: 50%;
+    bottom: 5px;
+    position: absolute;
+    transform: translate(-50%, 0);
+    z-index: 1;
+    border-radius: 50%;
+    font-size: 16px;
+    height: 35px;
+    width: 35px;
+    border: unset;
+    
+    background-color: #fff;
+    transition: all .3s;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+.audio-button:hover{
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}

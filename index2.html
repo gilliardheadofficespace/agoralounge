@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Head Office</title>
-  <link rel="stylesheet" href="./audience.css">
+  <link rel="stylesheet" href="./css/all.min.css">
+  <link rel="stylesheet" href="./index2.css">
 </head>
 
 <body>
@@ -16,13 +17,15 @@
   </div>
   <div class="container">
     <div class="row video-group" id="dish">
+      <div class="camera" id="local-player">
+        <button id="mute-audio" type="button" class="audio-button" style="display:none">
+          <i class="fas fa-microphone fa-fw"></i></button>
       </div>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
-  <script src="./audience.js"></script>
+  <script src="./index2.js"></script>
 </body>
 
 </html>

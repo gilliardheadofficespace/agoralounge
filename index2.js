@@ -6,6 +6,7 @@ var localTracks = {
 };
 
 var localTrackState = {
+  videoTrackEnabled: true,
   audioTrackEnabled: true
 }
 
@@ -49,7 +50,15 @@ document.querySelector("#mute-audio").addEventListener("click", function (e) {
   } else {
     unmuteAudio();
   }
-})
+});
+
+document.querySelector("#mute-video").addEventListener("click", function (e) {
+  if (localTrackState.videoTrackEnabled) {
+    muteVideo();
+  } else {
+    unmuteVideo();
+  }
+});
 
 async function join() {
 
@@ -145,6 +154,25 @@ async function unmuteAudio() {
   document.querySelector("#mute-audio > i").classList.add('fa-microphone');
 }
 
+async function muteVideo() {
+  if (!localTracks.videoTrack) return;
+  await localTracks.videoTrack.setEnabled(false);
+  localTrackState.videoTrackEnabled = false;
+  document.querySelector("#mute-video > i").classList.remove('fa-video');
+  document.querySelector("#mute-video > i").classList.add('fa-video-slash');
+}
+
+async function unmuteVideo() {
+  if (!localTracks.videoTrack) return;
+  await localTracks.videoTrack.setEnabled(true);
+  localTrackState.videoTrackEnabled = true;
+  document.querySelector("#mute-video > i").classList.remove('fa-video-slash');
+  document.querySelector("#mute-video > i").classList.add('fa-video');
+}
+
 function showMuteButton(show) {
-  document.querySelector("#mute-audio").style.display = show ? "block" : "none";
+  var buttons = document.querySelectorAll('.mute-button');
+  [].forEach.call(buttons, function(button) {
+    button.style.display = show ? "block" : "none";
+  });
 }

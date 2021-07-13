@@ -60,7 +60,7 @@
   cursor: pointer;
 }
 
-#join.button{
+#join.button, #share.button{
   background: linear-gradient(45deg,#3471f5,#6f9dff);
 }
 

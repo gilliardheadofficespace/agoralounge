@@ -1,4 +1,7 @@
-var client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+/* #region Options and configurations */
+
+var videoClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+var screenClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
 var localTracks = {
   videoTrack: null,
@@ -19,6 +22,10 @@ var options = {
   token: null
 };
 
+/* #endregion */
+
+/* #region DOM manager */
+
 document.addEventListener("DOMContentLoaded", function(event) { 
   var urlParams = new URL(location.href).searchParams;
   options.appid = urlParams.get("appid");
@@ -28,21 +35,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 document.querySelector("#join").addEventListener("click", function (e) {
-  e.preventDefault();
-  this.setAttribute("disabled", true);
-  try {
-    join();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    document.querySelector("#leave").removeAttribute("disabled");
-  }
-})
+  join();
+});
+
+// git add .
+
 
 
 document.querySelector("#leave").addEventListener("click", function (e) {
   leave();
-})
+});
 
 document.querySelector("#mute-audio").addEventListener("click", function (e) {
   if (localTrackState.audioTrackEnabled) {
@@ -60,28 +62,41 @@ document.querySelector("#mute-video").addEventListener("click", function (e) {
   }
 });
 
+// document.querySelector("#share").addEventListener("click", function (e) {
+//   if (localTrackState.videoTrackEnabled) {
+//     muteVideo();
+//   } else {
+//     unmuteVideo();
+//   }
+// });
+
+
+/* #endregion */
+
+/* #region Methods */
+
 async function join() {
 
   // Add an event listener to play remote tracks when remote user publishes.
-  client.on("user-published", handleUserPublished);
-  client.on("user-unpublished", handleUserUnpublished);
+  videoClient.on("user-published", handleUserPublished);
+  videoClient.on("user-unpublished", handleUserUnpublished);
 
   // Join a channel and create local tracks. Best practice is to use Promise.all and run them concurrently.
   [options.uid, localTracks.audioTrack, localTracks.videoTrack] = await Promise.all([
     // Join the channel.
-    client.join(options.appid, options.channel, options.token || null, options.uid || null),
+    videoClient.join(options.appid, options.channel, options.token || null, options.uid || null),
     // Create tracks to the local microphone and camera.
     AgoraRTC.createMicrophoneAudioTrack(),
     AgoraRTC.createCameraVideoTrack()
   ]);
 
-  showMuteButton(true);
+  showButtons(true);
 
   // Play the local video track to the local browser and update the UI with the user ID.
   localTracks.videoTrack.play("local-player");
 
   // Publish the local video and audio tracks to the channel.
-  await client.publish(Object.values(localTracks));
+  await videoClient.publish(Object.values(localTracks));
   console.log("publish success");
 }
 
@@ -92,7 +107,7 @@ async function leave() {
       track.stop();
       track.close();
       localTracks[trackName] = undefined;
-      showMuteButton(false);
+      showButtons(false);
     }
   }
 
@@ -100,7 +115,7 @@ async function leave() {
   remoteUsers = {};
 
   // leave the channel
-  await client.leave();
+  await videoClient.leave();
   document.querySelector("#join").removeAttribute("disabled");
   document.querySelector("#leave").setAttribute("disabled", true);
   console.log("client leaves channel success");
@@ -111,7 +126,7 @@ async function leave() {
 async function subscribe(user, mediaType) {
   const uid = user.uid;
   // subscribe to a remote user
-  await client.subscribe(user, mediaType);
+  await videoClient.subscribe(user, mediaType);
   console.log("subscribe success");
   if (mediaType === 'video') {
     const camera = `
@@ -136,7 +151,6 @@ function handleUserUnpublished(user) {
   const id = user.uid;
   delete remoteUsers[id];
 }
-
 
 async function muteAudio() {
   if (!localTracks.audioTrack) return;
@@ -170,9 +184,16 @@ async function unmuteVideo() {
   document.querySelector("#mute-video > i").classList.add('fa-video');
 }
 
-function showMuteButton(show) {
+function showButtons(show) {
   var buttons = document.querySelectorAll('.mute-button');
   [].forEach.call(buttons, function(button) {
     button.style.display = show ? "block" : "none";
   });
+
+  document.querySelector('#join').style.display = show ? "none" : "block";
+  document.querySelector('#leave').style.display = show ? "block" : "none";
+  // document.querySelector('#share').style.display = show ? "block" : "none";
+
 }
+
+/* #endregion */
